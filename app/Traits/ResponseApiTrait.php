@@ -2,20 +2,20 @@
 
 namespace App\Traits;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 trait ResponseApiTrait
 {
   /**
    * Core of response
-   * @param boolean $success
+   * @param array $result
    * @param string $message
-   * @param array $data
    * @param int $code
    * 
    * @return \Illuminate\Http\JsonResponse
    */
-  public function sendResponse($result, $message, $code = Response::HTTP_OK)
+  public function sendResponse($result = [], $message, $code = Response::HTTP_OK): JsonResponse
   {
     $response = [
       'success' => true,
@@ -33,7 +33,7 @@ trait ResponseApiTrait
    * 
    * @return \Illuminate\Http\JsonResponse
    */
-  public function sendError($error, $errorMessages = [], $code = 404)
+  public function sendError($error, $errorMessages = [], $code = 404): JsonResponse
   {
     $response = [
       'success' => false,

@@ -6,6 +6,8 @@ use App\Traits\ResponseApiTrait;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -35,31 +37,25 @@ class Handler extends ExceptionHandler
         });
     }
 
-    /**
-     * Convert an authentication exception into a response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
-     */
-    protected function unauthenticated($request, AuthenticationException $exception)
-    {
-        // this response view is just example
-        // you can change it to anything you want to redirect another front end
-        return $request->is() 
-                ? $this->sendError('Unauthorized', [], 401)
-                : response()->view('errors.401', [], 401);
-    }
-
     public function render($request, Throwable $exception)
     {
-            if($exception instanceOf ModelNotFoundException) {
-                return $this->sendError('Model not found', [], 404);
-            } 
+        if($exception instanceOf ModelNotFoundException) {
+            return $this->sendError('Model not found', [], Response::HTTP_NOT_FOUND);
+        } 
 
-            if ($exception instanceOf NotFoundHttpException) {
-                return $this->sendError('Incorrect route', [], 404);
-            }
+        if ($exception instanceOf NotFoundHttpException) {
+            return $this->sendError('Incorrect route', [], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($exception instanceOf AuthenticationException) {
+            return $request->expectsJson() 
+            ? $this->sendError('Unauthorized', [], Response::HTTP_UNAUTHORIZED)
+            : response()->view('errors.401', [], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($exception instanceOf ValidationException) {
+            return $this->sendError($exception->errors(), 'Ops! Some errors occurred', Response::HTTP_BAD_REQUEST);
+        }
 
         return parent::render($request, $exception);
 
