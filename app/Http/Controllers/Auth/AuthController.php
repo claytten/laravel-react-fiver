@@ -44,7 +44,9 @@ class AuthController extends Controller
         $data['password'] = bcrypt($data['password']);
         $user = $this->service->store($data);
 
-        return $this->sendResponse($user, 'Registration successful.');
+        $user->sendEmailVerificationNotification();
+
+        return $this->sendResponse($user->toArray(), 'Registration successful. A verification email has been sent to your email address.');
     }
 
     /**

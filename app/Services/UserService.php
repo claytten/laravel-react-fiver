@@ -35,7 +35,7 @@ class UserService
     }
 
     return [
-      'user' => $user,
+      'user' => $user->toArray(),
       'tokenCurrent' => $user->createToken($userAgent)->plainTextToken,
     ];
   }
@@ -54,6 +54,23 @@ class UserService
       return $user;
     } catch (\Exception $e) {
       throw new CustomServiceException(Response::HTTP_INTERNAL_SERVER_ERROR, 'Error while creating user.');
+    }
+  }
+
+  /**
+   * Find user by id.
+   *
+   * @param string $id
+   * @return App\Models\User
+   * @throws App\Exceptions\CustomServiceException
+   */
+  public function findUserById(string $id): User
+  {
+    try {
+      $user = User::findOrFail($id);
+      return $user;
+    } catch (\Exception $e) {
+      throw new CustomServiceException(Response::HTTP_NOT_FOUND, 'User not found.');
     }
   }
 }

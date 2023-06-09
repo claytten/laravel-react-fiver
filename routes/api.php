@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\VerifyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +17,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('register', [AuthController::class, 'register'])->name('register');
+Route::get('email/verify/{id}/{hash}', [VerifyController::class, 'verify'])->middleware('signed')->name('verification.verify');
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('email/resend', [VerifyController::class, 'resend'])->name('verification.resend');
     Route::post('/logout', [AuthController::class,'logout'])->name('logout');
-    Route::get('/user/getMe', [AuthController::class,'getMe'])->name('user.me');
+    Route::group(['middleware' => 'verfiedApi'], function () {
+        Route::get('/user/getMe', [AuthController::class,'getMe'])->name('user.me');
+    });
 });
