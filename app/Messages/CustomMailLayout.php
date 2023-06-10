@@ -4,22 +4,41 @@ namespace App\Messages;
 
 use Illuminate\Notifications\Messages\MailMessage;
 
-class CustomMailResetPassword extends MailMessage 
+class CustomMailLayout extends MailMessage 
 {
   /**
-   * The "variant" of the notification (facebook, twitter, instagra, youtube, or etc).
+   * The "variant" of the notification (facebook, twitter, instagram, youtube, or etc).
    *
-   * @var array
+   * @var mixed
    */
-  public $socialMedia = [];
+  protected $socialMedia = [];
+
+  /**
+   * type email heading (it's not subject).
+   *
+   * @var string
+   */
+  public $headingMail = '';
+
   
   /**
    * The Markdown template to render (if applicable).
    *
    * @var string|null
    */
-  public $markdown = 'mail.email-reset-password';
+  public $markdown = 'mail.email-auth';
 
+  /**
+   * The view to render (if applicable).
+   *
+   * @var string|null
+   */
+  public function __construct()
+  {
+    $this->socialMedia = config('app.social_media.default');
+  }
+
+  
   public function facebook($url)
   {
     $this->socialMedia['facebook'] = $url;
@@ -44,6 +63,12 @@ class CustomMailResetPassword extends MailMessage
     return $this;
   }
 
+  public function headingMail($headingMail)
+  {
+    $this->headingMail = $headingMail;
+    return $this;
+  }
+
   /**
    * Get an array representation of the message.
    *
@@ -61,6 +86,7 @@ class CustomMailResetPassword extends MailMessage
       'actionText' => $this->actionText,
       'actionUrl' => $this->actionUrl,
       'socialMedia' => $this->socialMedia,
+      'headingMail' => $this->headingMail,
       'displayableActionUrl' => str_replace(['mailto:', 'tel:'], '', $this->actionUrl ?? ''),
     ];
   }

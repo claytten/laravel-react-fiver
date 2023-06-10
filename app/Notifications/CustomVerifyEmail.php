@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Messages\CustomMailVerifyMessage;
+use App\Messages\CustomMailLayout;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,12 +19,11 @@ class CustomVerifyEmail extends VerifyEmail implements ShouldQueue
      */
     protected function buildMailMessage($url)
     {
-        return (new CustomMailVerifyMessage)
-            ->markdown('mail.email-verify')
-            ->subject("Please Verify Your Email Address")
+        return (new CustomMailLayout)
+            ->subject("Thank you for your application to ".config('app.name'))
+            ->headingMail("Please Verify Your Email Address")
             ->greeting("Thanks for joining ".config('app.name'))
             ->line("To finish signing up, please confirm your email address. This ensures we have the right email in case we need to contact you.")
-            ->action("Confirm Email Address", $url)
-            ->facebook("https://www.facebook.com/");
+            ->action("Confirm Email Address", $url);
     }
 }

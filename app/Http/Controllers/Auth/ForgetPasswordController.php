@@ -49,8 +49,8 @@ class ForgetPasswordController extends Controller
                     'password' => Hash::make($request->password)
                 ]);
                 $user->save();
-                event(new PasswordReset($user));
                 $user->tokens()->delete();
+                $user->sendReceiveResetPasswordNotification();
             }
         );
         return $status === Password::PASSWORD_RESET

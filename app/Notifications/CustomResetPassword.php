@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Messages\CustomMailResetPassword;
+use App\Messages\CustomMailLayout;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -40,17 +40,17 @@ class CustomResetPassword extends ResetPassword implements ShouldQueue
      * Get the verify email notification mail message for the given URL.
      *
      * @param  string  $url
-     * @return App\Messages\CustomMailResetPassword
+     * @return App\Messages\CustomMailLayout
      */
     protected function buildMailMessage($url)
     {
-        return (new CustomMailResetPassword())
+        return (new CustomMailLayout)
             ->subject("Set your new ".config('app.name')." password")
+            ->headingMail("Please confirm your reset password")
             ->greeting("Hi ".$this->email)
-            ->line('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')])
+            ->line('This password reset link will expire in '.config('auth.passwords.'.config('auth.defaults.passwords').'.expire').' minutes.')
             ->line('If you did not request a password reset, no further action is required.')
-            ->action("Set password", $url)
-            ->facebook("https://www.facebook.com/");
+            ->action("Set password", $url);
     }
 
     /**

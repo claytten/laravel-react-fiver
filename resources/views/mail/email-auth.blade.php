@@ -333,7 +333,11 @@
                                 <tr>
                                   <td align="center" style="padding:0;Margin:0;">
                                     <h1 style="text-align:center;margin:0;line-height:46px;mso-line-height-rule:exactly;font-family:Poppins, sans-serif;font-size:38px;font-style:normal;font-weight:bold;color:#5d541d">
-                                        Please confirm <br>your email address
+                                      @if (isset($headingMail))
+                                        {!! $headingMail !!}
+                                      @else
+                                        Hello
+                                      @endif
                                     </h1>
                                   </td>
                                 </tr>
@@ -362,6 +366,7 @@
                                     </p>
                                   </td>
                                 </tr>
+                                @if(isset($actionUrl))
                                 <tr>
                                   <td align="center" style="padding:0;Margin:0;">
                                     <span class="msohide es-button-border" style="border-style:solid;border-color:#2CB543;background:#8928c6;border-width:0px;display:inline-block;border-radius:30px;width:auto;mso-hide:all">
@@ -371,6 +376,7 @@
                                     </span>
                                   </td>
                                 </tr>
+                                @endif
                               </table>
                             </td>
                           </tr>
