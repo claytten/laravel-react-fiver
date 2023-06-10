@@ -9,6 +9,7 @@ use App\Services\UserService;
 use App\Traits\ResponseApiTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class AuthController extends Controller
 {
@@ -46,7 +47,7 @@ class AuthController extends Controller
 
         $user->sendEmailVerificationNotification();
 
-        return $this->sendResponse($user->toArray(), 'Registration successful. A verification email has been sent to your email address.');
+        return $this->sendResponse($user->toArray(), 'Registration successful. A verification email has been sent to your email address.', Response::HTTP_CREATED);
     }
 
     /**
