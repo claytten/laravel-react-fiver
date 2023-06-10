@@ -87,4 +87,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new CustomReceiveResetPassword($this->email));
     }
+
+    public function passwordResetTokens()
+    {
+        return $this->hasMany(PasswordResetToken::class, 'email', 'email');
+    }
 }
