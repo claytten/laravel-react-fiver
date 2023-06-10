@@ -36,7 +36,7 @@ class UserService
 
     return [
       'user' => $user->toArray(),
-      'tokenCurrent' => $user->createToken($userAgent)->plainTextToken,
+      'accessToken' => $user->createToken($userAgent)->plainTextToken,
     ];
   }
 
