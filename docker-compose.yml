@@ -3,9 +3,6 @@ services:
   # Application
   app:
     build:
-      args:
-        user: webuser
-        uid: 1000
       context: ./
       dockerfile: ./docker/dev/app/Dockerfile
     image: lf-app
@@ -20,10 +17,13 @@ services:
     volumes:
       - ./:/var/www
       - ./docker/dev/php/app.ini:/usr/local/etc/php/conf.d/app.ini
+    entrypoint: sh -c ./docker/dev/shell/dev.sh
     extra_hosts:
       - host.docker.internal:host-gateway
     networks:
       - lf
+    depends_on:
+      - database
 
   # Web Server
   web:
@@ -38,6 +38,8 @@ services:
     volumes:
       - ./:/var/www
       - ./docker/dev/nginx:/etc/nginx/conf.d/
+    depends_on:
+      - app
     networks:
       - lf
 
@@ -45,7 +47,13 @@ services:
   database:
     platform: linux/x86_64
     image: mysql:8.0.32
-    command: mysqld --sql_mode=""
+    command: [
+      'mysqld',
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci',
+      '--default-time-zone=+7:00',
+      '--lower-case-table-names=1'
+    ]
     container_name: lf-db
     restart: unless-stopped
     logging:
@@ -62,6 +70,7 @@ services:
       SERVICE_NAME: mysql
     volumes:
       - dbdata:/var/lib/mysql
+      - ./docker/dev/mysql:/docker-entrypoint-initdb.d
     networks:
       - lf
 
@@ -74,6 +83,8 @@ services:
       - "8025:8025"
     networks:
       - lf
+    depends_on:
+      - database
 
 volumes:
   dbdata:
