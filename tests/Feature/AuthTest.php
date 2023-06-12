@@ -125,7 +125,7 @@ class AuthTest extends TestCase
             'password' => 'password',
         ])->assertOk();
 
-        $this->postJson('/api/login', [
+        $this->postJson(route('login'), [
             'email' => $user->email,
             'password' => 'password',
         ])->assertOk();
@@ -135,11 +135,13 @@ class AuthTest extends TestCase
     {
         $user = User::factory()->create();
 
+        $this->artisan('cache:clear');
         for ($i=0; $i < 10; $i++) {
             $this->postJson(route('login'), [
                 'email' => $user->email,
                 'password' => 'password1',
-            ])->assertUnauthorized();
+            ])
+            ->assertUnauthorized();
         }
 
         $this->postJson(route('login'), [
