@@ -26,22 +26,34 @@ Grab a shell inside docker/app
 ```
 docker-compose exec -u root app /bin/sh
 ```
-Generate key and migrate database after grab shell
+Install dependencies inside container app
 ```
-php artisan key:generate && php artisan migrate
+composer install
+```
+Generate key and migrate database
+```
+composer dump-autoload && php artisan key:generate && php artisan storage:link && php artisan migrate
 ```
 You can now access the server at http://localhost:8022 in default port. You can change port in .env at FORWARD_NGINX_PORT.
 
 Testing
 ------------
-Make sure you are already push project into docker using docker-compose
+Make sure you are already push project into docker using docker-compose and already on current directory laravel-react-fiver
+Copy .env and rename to .env.testing
+```
+cp .env .env.testing
+```
+Delete one line DB_DATABASE in .env.testing and change DB_DATABASE_TESTING to DB_DATABASE
+```
+sed -i '/^DB_DATABASE=/d' .env.testing && sed -i 's/^DB_DATABASE_TESTING=/DB_DATABASE=/' .env.testing
+```
 Grab a shell inside docker/app
 ```
 docker-compose exec -u root app /bin/sh
 ```
 Run this code to testing
 ```
-php artisan test
+php artisan test --env=testing
 ```
 
 ## Dependencies
