@@ -3,6 +3,9 @@ services:
   # Application
   app:
     build:
+      args:
+        user: claytten
+        uid: 1000
       context: ./
       dockerfile: ./docker/dev/app/Dockerfile
     image: lf-app
