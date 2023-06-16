@@ -146,6 +146,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Social Media
+    |--------------------------------------------------------------------------
+    |
+    | These configuration options determine the social media url.
+    |
+    */
+    'social_media' => [
+        'default' => [
+            'facebook' => env('FACEBOOK_URL', "https://www.facebook.com/") ,
+            'twitter' => env('TWITTER_URL', "https://www.twitter.com/"),
+            'instagram' => env('INSTAGRAM_URL', "https://www.instagram.com/"),
+            'youtube' => env('YOUTUBE_URL', "https://www.youtube.com/"),
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |

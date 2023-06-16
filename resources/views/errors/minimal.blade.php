@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>@yield('title')</title>
-  <link rel="stylesheet" type="text/css" href="{{ asset('assets/style/error.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/error.css') }}">
 </head>
 <body>
   <svg xmlns="http://www.w3.org/2000/svg" id="robot-error" viewBox="0 0 260 118.9" role="img">

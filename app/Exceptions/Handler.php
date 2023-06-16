@@ -6,6 +6,7 @@ use App\Traits\ResponseApiTrait;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -55,6 +56,12 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceOf ValidationException) {
             return $this->sendError($exception->errors(), 'Ops! Some errors occurred', Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($exception instanceof ThrottleRequestsException) {
+            return $request->expectsJson()
+            ? $this->sendError('Too Many Attempts.', [], Response::HTTP_TOO_MANY_REQUESTS)
+            : response()->view('errors.429', [], Response::HTTP_TOO_MANY_REQUESTS);
         }
 
         return parent::render($request, $exception);
