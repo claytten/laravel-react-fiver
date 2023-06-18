@@ -4,6 +4,7 @@ This repo is functionality not completed yet. I will update it soon.
 
 ## Requirement
  * `Docker Compose` [link](https://docs.docker.com/compose/install/)
+ * `(optional) Make` [Windows/Mac/Linux](https://sp21.datastructur.es/materials/guides/make-install.html)
 
 ## Installation
 Clone the repository
@@ -20,11 +21,11 @@ cp .env.example .env
 ```
 Push project into docker using docker-compose
 ```
-docker-compose up --build -d
+docker-compose up --detach --build
 ```
 Grab a shell inside docker/app
 ```
-docker-compose exec -u root app /bin/sh
+docker-compose exec app sh
 ```
 Install dependencies inside container app
 ```
@@ -35,6 +36,7 @@ Generate key and migrate database
 composer dump-autoload && php artisan key:generate && php artisan storage:link && php artisan migrate
 ```
 You can now access the server at http://localhost:8022 in default port. You can change port in .env at FORWARD_NGINX_PORT.
+***Note*** : If you already install "Make" on your machine, after build container you can run some command like "make install" to install composer without grab a shell inside docker/app first or "make migrate" to migrate database. Then you can customize whatever you want on makefile to shortcut your command.
 
 Testing
 ------------
