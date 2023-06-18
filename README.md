@@ -51,7 +51,7 @@ sed -i '/^DB_DATABASE=/d' .env.testing && sed -i 's/^DB_DATABASE_TESTING=/DB_DAT
 ```
 Grab a shell inside docker/app
 ```
-docker-compose exec -u root app /bin/sh
+docker-compose exec app sh
 ```
 Run this code to testing
 ```
