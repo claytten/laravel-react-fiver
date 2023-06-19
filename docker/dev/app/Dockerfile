@@ -6,11 +6,14 @@ ARG uid
 
 RUN apk --update add wget \
   curl \
-  libxml2-dev
+  libxml2-dev \
+  libpng-dev \
+  libjpeg-turbo-dev  
 
 COPY --from=composer/composer:2.3.10-bin /composer /usr/bin/composer
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql xml sockets
+RUN docker-php-ext-configure gd --enable-gd --with-jpeg
+RUN docker-php-ext-install mysqli pdo pdo_mysql xml sockets gd
 
 RUN rm /var/cache/apk/* && \
     mkdir -p /var/www
