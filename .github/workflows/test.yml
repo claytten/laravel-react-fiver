@@ -34,6 +34,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Set Timezone
+        uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Asia/Jakarta"
+          timezoneMacos: "Asia/Jakarta"
+          timezoneWindows: "Jakarta Standard Time"
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
