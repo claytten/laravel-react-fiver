@@ -22,8 +22,11 @@ seed:
 migrate:
 	docker-compose exec app php artisan migrate:fresh
 
-test:
+tests:
 	docker-compose exec app php artisan test
+
+test:
+	docker-compose exec app php artisan test --filter $(filter)
 
 clean:
 	docker-compose exec -u root app php artisan cache:clear

@@ -38,7 +38,7 @@ class UserController extends Controller
             return $this->sendError('The provided credentials are incorrect.', [], Response::HTTP_UNAUTHORIZED);
         }
 
-        $user->password = $request['password'];
+        $user->password = Hash::make($request->input('password'));
         $user->save();
 
         $user->tokens()->delete();
@@ -69,10 +69,6 @@ class UserController extends Controller
      */
     public function updateAvatar(UpdateAvatarRequest $request): JsonResponse
     {
-        if(!$request->hasFile('avatar')) {
-            return $this->sendError('Avatar is required.', [], Response::HTTP_BAD_REQUEST);
-        }
-
         $user = $this->service->saveImage($request->user(), $request->file('avatar'), 'public');
 
         return $this->sendResponse($user, 'Avatar updated successfully.');
