@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgetPasswordController;
 use App\Http\Controllers\Auth\VerifyController;
+use App\Http\Controllers\Users\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class,'logout'])->name('logout');
     
     Route::group(['middleware' => ['verfiedApi']], function () {
-        Route::get('/user/getMe', [AuthController::class,'getMe'])->middleware('throttle:5,1')->name('user.me');
+        Route::get('/user/getMe', [AuthController::class,'getMe'])->name('user.me');
+        Route::match(['put', 'patch'], '/user/update/profile', [UserController::class,'updateProfile'])->name('updateProfile');
+        Route::match(['put', 'patch'], '/user/update/password', [UserController::class,'updatePassword'])->name('updatePassword');
+        Route::post('/user/update/avatar', [UserController::class,'updateAvatar'])->middleware('throttle:5,1')->name('updateAvatar');
+        Route::delete('/user/delete/avatar', [UserController::class,'deleteAvatar'])->name('deleteAvatar');
     });
 });

@@ -12,12 +12,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasUuids, SoftDeletes;
 
     protected $table = 'users';
+
+    const FDIMAGE = 'images/users';
 
     /**
      * The attributes that are mass assignable.
@@ -91,5 +94,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function passwordResetTokens()
     {
         return $this->hasMany(PasswordResetToken::class, 'email', 'email');
+    }
+    
+    /**
+     * Get the user's avatarUrl.
+     */
+    protected function avatarUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string|null $value) => $value ? asset('storage/' . $value) : $value,
+        );
     }
 }
